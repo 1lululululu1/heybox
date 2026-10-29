@@ -17,20 +17,24 @@ npm install
 
 ## 账号配置
 
-环境变量 `heybox_ck` 填入 App 请求中的 Cookie。每日任务和抽奖任务需要 App 请求中的设备字段，直接附加在同一账号配置中。
+环境变量 `heybox_ck` 填入 App 请求中的 Cookie。每日任务和抽奖任务需要 App 请求中的设备字段，直接附加在同一账号配置中。以下为 Android 配置示例：
 
 ```text
 pkey=xxx;x_xhh_tokenid=xxx;imei=xxx;device_info=xxx;os_version=16;dw=411;channel=heybox_xiaomi;
 ```
 
-| 字段 | 来源 |
-| --- | --- |
-| `pkey`、`x_xhh_tokenid` | App 请求的 Cookie |
-| `imei` | App 请求查询参数中的设备标识 |
-| `device_info` | App 请求查询参数中的设备型号 |
-| `os_version` | App 请求查询参数中的系统版本 |
-| `dw` | App 请求查询参数中的屏幕宽度 |
-| `channel` | App 请求查询参数中的安装渠道 |
+| 配置字段 | Android 来源 | iOS 来源 |
+| --- | --- | --- |
+| `pkey`、`x_xhh_tokenid` | 请求头 Cookie 中的同名字段 | 请求头 Cookie 中的同名字段 |
+| `imei` | 查询参数 `imei` | 查询参数 `device_id` 的原值 |
+| `device_info` | 请求中的设备型号 | 请求中的设备型号 |
+| `os_version` | 请求中的系统版本 | 请求中的系统版本 |
+| `dw` | 请求中的屏幕宽度 | 请求中的屏幕宽度 |
+| `channel` | 查询参数 `channel` 的原值 | 请求没有该字段时省略 |
+
+iOS 将 `device_id` 原值填入配置字段 `imei`。设备型号、系统版本和屏幕宽度均使用实际请求值。`channel` 不参与 `hkey`、`_rnd` 的算法计算，有值时按原值发送，没有时省略。
+
+使用 Reqable 获取 Cookie：保持小黑盒已登录，开启抓包后进入 **我 → 我的任务 → 我的钱包 → 明细**，搜索 `api.xiaoheihe.cn`，查看对应请求头的 `Cookie`，复制其中的 `pkey` 和 `x_xhh_tokenid`。
 
 账号 ID 从 `pkey` 解析。多个账号用换行或 `&` 分隔，每个账号配置自己的设备字段。
 

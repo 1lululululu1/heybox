@@ -55,7 +55,7 @@ class HeyboxAppClient extends HttpClient {
 
   signingInput(path, timeSec) {
     const profile = this.account.appProfile;
-    for (const key of ["device_info", "os_version", "dw", "channel"]) {
+    for (const key of ["device_info", "os_version", "dw"]) {
       if (!tools.toText(profile?.[key])) throw new Error(`账号配置缺少App请求字段${key}`);
     }
     if (!/^[\x21-\x7e]+$/.test(this.account.imei)) throw new Error("账号配置缺少有效App请求字段imei");

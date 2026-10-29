@@ -22,7 +22,7 @@ class HeyboxAccount extends BasicAccount {
       device_info: this.deviceInfo,
       os_version: fields.get("os_version") || "",
       dw: fields.get("dw") || "",
-      channel: fields.get("channel") || "",
+      channel: fields.get("channel") || undefined,
     };
     this.appCookie = buildAppCookie(rawData);
     this.appClientCookie = `${this.appCookie};x_pkey=${fields.get("pkey")};x_heybox_id=${heyboxId}`;
