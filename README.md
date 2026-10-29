@@ -52,6 +52,12 @@ export heybox_ck='pkey=xxx;x_xhh_tokenid=xxx;imei=xxx;device_info=xxx;os_version
 npm run heybox_sign
 ```
 
+## GitHub Actions
+
+在仓库 **Settings → Secrets and variables → Actions** 中新增 Repository secret `HEYBOX_CK`，值填写上方完整 Cookie 配置（包括每日任务需要的设备字段）。多个账号可用换行或 `&` 分隔。
+
+工作流每天北京时间 09:17 自动运行 `heybox_sign`。也可以在仓库 **Actions → Heybox tasks → Run workflow** 手动运行，并选择 `heybox_sign`、`heybox_claim`、`heybox_rush` 或 `heybox_roll`。
+
 青龙面板添加 `heybox_ck` 环境变量后，运行对应脚本：
 
 ```bash
