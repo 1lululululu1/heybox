@@ -54,7 +54,7 @@ npm run heybox_sign
 
 ## GitHub Actions
 
-在仓库 **Settings → Secrets and variables → Actions** 中新增 Repository secret `HEYBOX_CK`，值填写上方完整 Cookie 配置（包括每日任务需要的设备字段）。多个账号可用换行或 `&` 分隔。
+在仓库 **Settings → Secrets and variables → Actions** 中新增 Repository secret `HEYBOX_CK`，值填写上方完整 Cookie 配置（包括每日任务需要的设备字段）。多个账号可用换行或 `&` 分隔。可选地新增 Repository secret `FEISHU_WEBHOOK`，值填写飞书群机器人的 Webhook 地址；配置后优先通过飞书发送通知，否则继续使用 `sendNotify.js`。
 
 工作流每天北京时间 09:17 自动运行 `heybox_sign`。也可以在仓库 **Actions → Heybox tasks → Run workflow** 手动运行，并选择 `heybox_sign`、`heybox_claim`、`heybox_rush` 或 `heybox_roll`。
 
@@ -89,4 +89,4 @@ task heybox_roll.js
 
 脚本输出账号任务状态、H 币、优惠券领取结果和抽奖盒券数量。HTTP、JSON、业务状态和响应结构异常会打印完整响应 body，不截断、不脱敏。
 
-存在账号初始化失败、请求失败或可执行任务未完成时退出码为 `1`，全部执行成功时为 `0`。没有可领券或进行中的抽奖活动时正常结束。配置 `sendNotify.js` 后发送执行结果通知。
+存在账号初始化失败、请求失败或可执行任务未完成时退出码为 `1`，全部执行成功时为 `0`。没有可领券或进行中的抽奖活动时正常结束。配置 `feishu_webhook` 后优先通过飞书发送执行结果通知，未配置时使用 `sendNotify.js`。

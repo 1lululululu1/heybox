@@ -48,5 +48,6 @@ jobs:
       - name: Run selected script
         env:
           heybox_ck: ${{ secrets.HEYBOX_CK }}
+          feishu_webhook: ${{ secrets.FEISHU_WEBHOOK }}
           SCRIPT: ${{ inputs.script || 'heybox_sign' }}
         run: npm run "$SCRIPT"

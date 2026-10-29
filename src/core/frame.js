@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const tools = require("./tools");
+const HttpClient = require("./http");
 
 function loadSendNotify() {
   const mainDir = require.main?.filename ? path.dirname(require.main.filename) : process.cwd();
@@ -109,7 +110,30 @@ const $ = {
       if (Array.isArray(user.notifyStr)) list.push(...user.notifyStr.filter(Boolean));
     }
     if (!list.length) return;
+    const webhook = process.env.feishu_webhook || process.env.FEISHU_WEBHOOK;
     try {
+      if (webhook) {
+        try {
+          const response = await new HttpClient({ timeoutMs: 10000 }).post({
+            url: webhook,
+            headers: { 'content-type': 'application/json' },
+            body: {
+              msg_type: 'text',
+              content: { text: [this.notifyTitle || `${this.name}通知`, ...list].join('\n') },
+            },
+          });
+          const result = response.result || {};
+          const code = result.code ?? result.StatusCode;
+          if (Number(code) !== 0) {
+            throw new Error(result.msg || result.StatusMessage || `错误码 ${code ?? "unknown"}`);
+          }
+          this.log(`飞书通知已发送: ${list.length}条`);
+        } catch (error) {
+          error.message = String(error.message).replace(webhook, '[REDACTED]');
+          throw error;
+        }
+        return;
+      }
       const sendNotify = loadSendNotify();
       await sendNotify(this.notifyTitle || `${this.name}通知`, list.join("\n"));
       this.log(`通知已发送: ${list.length}条`);
